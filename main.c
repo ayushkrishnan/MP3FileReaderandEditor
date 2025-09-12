@@ -6,6 +6,8 @@ DESC:MP3 File tag reader and editor
 
 #include<stdio.h>
 #include<string.h>
+#include "common.h"
+#include "view.h"
 
 
 int main(int argc,char *args[])
@@ -37,13 +39,48 @@ int main(int argc,char *args[])
         return 0;
     }
 
-    if(argc == 3 && (strcmp(args[1],"-v")==0));
+    if(argc == 3 && (strcmp(args[1],"-v")==0))
     {
         printf("view in mp3");
+        FILE *mptr = fopen(args[2],"rb");
+        printf("view in mp3\n");
+        if(mptr==NULL)
+        {
+            printf("File Opening Failed ");
+            return 1;
+        }
+        printf("view in mp3\n");
+
+        //Declare the frame header
+        unsigned char frame_header[11];
+
+        fread(frame_header,1,10,mptr);//reading first 10 bytes from the mp3 file
+       
+        if(frame_header[0]!='I' && frame_header[1]!='D'&& frame_header[2]!='3')
+        {
+            printf("Unsupported Version");
+            fclose(mptr);
+            return 1;
+        }
+        if(frame_header[3]!=3 && frame_header[4]!=0)
+        {
+            printf("Unsupported Version");
+            fclose(mptr);
+            return 1;
+        }
+        
+        unsigned int tagsize= bigendian_to_litle(frame_header+6);
+        frame_header[10]='\0';
+        view_tag(args[2],tagsize);
+        fclose(mptr);
+
+
+        
     }
 
-    if(argc == 3 && (strcmp(args[1],"-e")==0));
+    if(argc >3 && (strcmp(args[1],"-e")==0))
     {
-        printf("view in mp3");
+        printf("edit in mp3");
+
     }
 }
