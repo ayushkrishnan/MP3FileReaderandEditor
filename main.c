@@ -41,20 +41,19 @@ int main(int argc,char *args[])
 
     if(argc == 3 && (strcmp(args[1],"-v")==0))
     {
-        printf("view in mp3");
-        FILE *mptr = fopen(args[2],"rb");
-        printf("view in mp3\n");
+        FILE *mptr = fopen(args[2],"r");
         if(mptr==NULL)
         {
             printf("File Opening Failed ");
             return 1;
         }
-        printf("view in mp3\n");
+       
 
         //Declare the frame header
         unsigned char frame_header[11];
 
-        fread(frame_header,1,10,mptr);//reading first 10 bytes from the mp3 file
+        //reading first 10 bytes from the mp3 file
+        int res = fread(frame_header,1,10,mptr);
        
         if(frame_header[0]!='I' && frame_header[1]!='D'&& frame_header[2]!='3')
         {
@@ -68,19 +67,27 @@ int main(int argc,char *args[])
             fclose(mptr);
             return 1;
         }
+        //if(check_valid(frame_header)==0);
         
+        //Taking the frame tag size and convert it
         unsigned int tagsize= bigendian_to_litle(frame_header+6);
         frame_header[10]='\0';
         view_tag(args[2],tagsize);
+
         fclose(mptr);
-
-
         
     }
 
     if(argc >3 && (strcmp(args[1],"-e")==0))
     {
+
         printf("edit in mp3");
+        FILE *mptr = fopen(args[2],"w");
+        if(mptr==NULL)
+        {
+            printf("File Opening Failed ");
+            return 1;
+        }
 
     }
 }
