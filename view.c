@@ -11,12 +11,11 @@ void view_tag(char *fname,int tgsize)
     FILE *fptr = fopen(fname,"rb");
     fseek(fptr,10,SEEK_SET);
     char tagheader[10];
-     printf("\n------------------------------------------------------------------------------------------------------------------------\n");
-     printf("\n\t\t\t\t\tMP3 FILE VIEW\n");
-     printf("\n------------------------------------------------------------------------------------------------------------------------\n");
-    //printf("HELLOOOOO\n");
-    printf("%d",tgsize);
-    //printf("Hello\n");
+    printf("\n------------------------------------------------------------------------------------------------------------------------\n");
+    printf("\n\t\t\t\t\tMP3 FILE VIEW\n");
+    printf("\n------------------------------------------------------------------------------------------------------------------------\n");
+    
+    //it will check if the pointer has reached the end of the file
     while((ftell(fptr)<tgsize))
     {
         //reading the first 10 bytes after the file header into the tagheader

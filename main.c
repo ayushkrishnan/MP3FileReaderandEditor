@@ -8,6 +8,7 @@ DESC:MP3 File tag reader and editor
 #include<string.h>
 #include "common.h"
 #include "view.h"
+#include "edit.h"
 
 
 int main(int argc,char *args[])
@@ -53,21 +54,15 @@ int main(int argc,char *args[])
         unsigned char frame_header[11];
 
         //reading first 10 bytes from the mp3 file
-        int res = fread(frame_header,1,10,mptr);
+        fread(frame_header,1,10,mptr);
+
        
-        if(frame_header[0]!='I' && frame_header[1]!='D'&& frame_header[2]!='3')
+        if(check_valid(frame_header))
         {
-            printf("Unsupported Version");
+            printf("Unsupported version");
             fclose(mptr);
             return 1;
         }
-        if(frame_header[3]!=3 && frame_header[4]!=0)
-        {
-            printf("Unsupported Version");
-            fclose(mptr);
-            return 1;
-        }
-        //if(check_valid(frame_header)==0);
         
         //Taking the frame tag size and convert it
         unsigned int tagsize= bigendian_to_litle(frame_header+6);
@@ -82,12 +77,28 @@ int main(int argc,char *args[])
     {
 
         printf("edit in mp3");
-        FILE *mptr = fopen(args[2],"w");
+        FILE *mptr = fopen(args[4],"r");
         if(mptr==NULL)
         {
             printf("File Opening Failed ");
             return 1;
         }
+
+        unsigned char f_head[11];
+        
+        fread(f_head,10,1,mptr);
+
+        if(check_valid(f_head))
+        {
+            printf("Unsupported Version");
+            return 1;
+        }
+
+        unsigned int tagsize= bigendian_to_litle(f_head+6);
+        f_head[10]='\0';
+        edit_tag(args[3],args[2],tagsize);
+
+        fclose(mptr);
 
     }
 }
