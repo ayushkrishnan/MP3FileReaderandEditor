@@ -23,3 +23,30 @@ unsigned int bigendian_to_litle(char size[4])
     return new_size;
 
 }
+
+int check_valid(char * frame_header)
+{
+    if(frame_header[0]!='I' && frame_header[1]!='D'&& frame_header[2]!='3')
+        {
+            printf("Unsupported ID3 Version");
+            //fclose(mptr);
+            return 1;
+        }
+        if(frame_header[3]!=3 && frame_header[4]!=0)
+        {
+            printf("Unsupported Version other than 2.3");
+            //fclose(mptr);
+            return 1;
+        }
+        return 0;
+}
+
+void little_to_big_endian(unsigned int *ptr , int arr[])
+{
+    
+    for(int i=0;i<4;i++)
+    {
+         arr[i]=*((char *)ptr+(3-i));
+    }
+
+}

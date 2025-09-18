@@ -96,8 +96,8 @@ int main(int argc,char *args[])
 
         unsigned int tagsize= bigendian_to_litle(f_head+6);
         f_head[10]='\0';
-        edit_tag(args[3],args[2],tagsize);
-
+        edit_tag(args[4],args[2],args[3],tagsize);
+        view_tag(args[4],tagsize);
         fclose(mptr);
 
     }
